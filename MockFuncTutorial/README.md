@@ -1,3 +1,5 @@
+# Notes from this tutorial
+https://codefather.tech/blog/python-mock-and-patch/
 ## How to use MagicMock
 
 Mocking is a technique used to replace part of the code that
@@ -61,4 +63,32 @@ class TestFunc2(unittest.TestCase):
         
 ### execute this file with this command
 ### python -m unittest test_func2.TestFunc2.test_this
+```
+### @patch Decorator
+The **unittest.mock** library provides the patch decorator that can 
+replace the behaviour of a target.
+
+#### Decorator Usage
+1. import patch instead of MagicMock `from unittest.mock import patch`
+2. add the decorator to the test method
+```python
+@patch(unique_names.get_file_names)
+```
+3. Add the argument `mock_get_file_names.return_value`, follows the pattern `mock_${patch_target}` inside your test method. This automatically passed by the decorator
+4. Set the `mock_get_file_names` return value
+
+Example is given to the following code snippet
+
+```python
+# tests/test_names_patch.py
+import unique_names
+from unittest.mock import patch
+
+class TestNamePatch(unittest.TestCase):
+    @patch('unique_names.get_file_names')
+    def test_names_patch(self, mock_get_file_names):
+        mock_get_file_names.return_value = ["Panos", "Vas", "Ellie"]
+        names = unique_names.get_unique_names("names.txt")
+        self.assertIsEqual(names, ["Ellie", "Panos", "Vas"])
+        
 ```
